@@ -11,7 +11,7 @@
 #   Browse user installed themes in `data/themes/`
 theme = "ocean"
 
-# disqusURL: "https://joshuagoldberg.name"
+# disqusURL: "https://redamastouri.com"
 
 # Enable users to switch between day and night mode?
 day_night = true
@@ -73,7 +73,7 @@ privacy_pack = false
 
 # Enable visitors to edit pages?
 #   `repo` defines the repository URL. `editable` defines which page types can be edited.
-edit_page = {repo_url = "https://github.com/goldbergdata/joshuagoldberg-website", content_dir = "", repo_branch = "master", editable = {docs = true, page = false, post = false}}
+edit_page = {repo_url = "https://github.com/RedaMastouri/redamastouriportal", content_dir = "", repo_branch = "master", editable = {docs = true, page = false, post = false}}
 
 ############################
 ## Contact details
@@ -83,7 +83,7 @@ edit_page = {repo_url = "https://github.com/goldbergdata/joshuagoldberg-website"
 ############################
 
 # Enter contact details (optional). To hide a field, clear it to "".
-email = "josh.goldberg1@outlook.com"
+email = "reda.mastouri@rutgers.edu"
 phone = ""
 
 # Address
@@ -107,11 +107,11 @@ appointment_url = ""
 # Contact links
 #   Set to `[]` to disable, or comment out unwanted lines with a hash `#`.
 contact_links = [
-  {icon = "twitter", icon_pack = "fab", name = "DM Me", link = "https://twitter.com/goldbergdata"},
-  {icon = "linkedin", icon_pack = "fab", name = "DM Me", link = "https://linkedin.com/in/goldbergdata"}
+  {icon = "twitter", icon_pack = "fab", name = "DM Me", link = "https://twitter.com/redamastouri"},
+  {icon = "linkedin", icon_pack = "fab", name = "DM Me", link = "https://linkedin.com/in/redamastouri"}
   # {icon = "skype", icon_pack = "fab", name = "Skype Me", link = "skype:echo123?call"},
   # {icon = "keybase", icon_pack = "fab", name = "Chat on Keybase", link = "https://keybase.io/"},
-  # {icon = "comments", icon_pack = "fas", name = "Discuss on Forum", link = "https://discourse.gohugo.io"},
+  # {icon = "comments", icon_pack = "fas", name = "Discuss on Forum", link = "https://discourse.rmastour.io"},
   # {icon = "telegram", icon_pack = "fab", name = "Telegram Me", link = "https://telegram.me/@Telegram"},
   ]
 
@@ -123,7 +123,7 @@ contact_links = [
 sharing_image = "chicago.jpg"
 
 # Twitter username (without @). Used when a visitor shares your site on Twitter.
-twitter = "goldbergdata"
+twitter = "redamastouri"
 
 ############################
 ## Regional Settings
@@ -139,7 +139,6 @@ time_format = "3:04 PM"
 address_format = "en-us"
 
 ############################
-## Advanced
 ############################
 
 # Main menu alignment (l = left, c = center, r = right) and logo options.
@@ -220,7 +219,7 @@ plugins_js  = []
 
   # Configuration of Disqus.
   [comments.disqus]
-    shortname = "joshuagoldberg-name"  # Paste the shortname from your Disqus dashboard.
+    shortname = "reda.mastouri"  # Paste the shortname from your Disqus dashboard.
     show_count = true  # Show comment count in page header? (true/false)
 
   # Configuration of Commento.
