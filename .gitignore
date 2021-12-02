@@ -1,8 +1,6 @@
-# IDEs
-.idea/
-
-# Hugo
-/resources/
-public/
-jsconfig.json
-node_modules/
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+public/**
+content/post/udacity-data-science-project-1/.ipynb_checkpoints/**

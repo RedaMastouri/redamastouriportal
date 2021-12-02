@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Week 4: Advanced SQL</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Joshua Goldberg  Data Understanding and Preparation: DABP12000 20A7 Fall 2020" />
+    <script src="libs/header-attrs-2.3/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/robot-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/uchicago.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: left, middle, inverse, title-slide
+
+# Week 4: Advanced SQL
+### Joshua Goldberg <br><span style="font-size: 50%;">Data Understanding and Preparation: DABP12000 20A7<br>Fall 2020</span>
+
+---
+
+
+
+
+class: title, title-inv-7, center
+count: FALSE
+
+# Topics to discuss
+
+--
+
+.center[
+.box-1.medium[Joins]
+]
+
+--
+
+.center[
+.box-1.medium[Sub queries]
+]
+
+--
+
+.center[
+.box-1.medium[Views]
+]
+
+---
+
+class: text-slide, main-slide, center, middle, hide-count
+
+# Joining data
+
+---
+
+class: center
+
+&lt;img src="join-venn.png" width="1469" /&gt;
+
+&lt;div class="my-footer"&gt;&lt;span&gt;https://r4ds.had.co.nz/relational-data.html&lt;/span&gt;&lt;/div&gt;
+
+---
+
+class: text-slide
+
+# Inner join
+
+&lt;img class="svg-img" src="images/static/svg/inner-join.svg"/&gt;
+
+&lt;div class="my-footer"&gt;&lt;span&gt;https://github.com/gadenbuie/tidyexplain&lt;/span&gt;&lt;/div&gt;
+
+---
+
+class: text-slide
+
+# Inner join
+
+.pull-left[All rows from x where there are matching values in y, and all columns from x and y.]
+
+&lt;img src="images/inner-join-2.gif" style="width=" /&gt;
+
+&lt;div class="my-footer"&gt;&lt;span&gt;https://github.com/gadenbuie/tidyexplain&lt;/span&gt;&lt;/div&gt;
+
+---
+
+class: text-slide
+
+# Left join
+
+&lt;img class="svg-img" src="images/static/svg/left-join-2.svg"/&gt;
+
+&lt;div class="my-footer"&gt;&lt;span&gt;https://github.com/gadenbuie/tidyexplain&lt;/span&gt;&lt;/div&gt;
+
+---
+
+class: text-slide
+
+# Left join
+
+.pull-left[All rows from x, and all columns from x and y. Rows in x with no match in y will have NA values in the new columns.]
+
+&lt;img src="images/left-join-2.gif"/&gt;
+
+&lt;div class="my-footer"&gt;&lt;span&gt;https://github.com/gadenbuie/tidyexplain&lt;/span&gt;&lt;/div&gt;
+
+
+---
+
+class: text-slide
+
+# Left join (extra rows in y)
+
+&lt;img class="svg-img" src="images/static/svg/left-join-extra-2.svg"/&gt;
+
+&lt;div class="my-footer"&gt;&lt;span&gt;https://github.com/gadenbuie/tidyexplain&lt;/span&gt;&lt;/div&gt;
+
+---
+
+class: text-slide
+
+# Left join (extra rows in y)
+
+.pull-left[… If there are multiple matches between x and y, all combinations of the matches are returned.]
+
+&lt;img src="images/left-join-extra-2.gif"/&gt;
+
+&lt;div class="my-footer"&gt;&lt;span&gt;https://github.com/gadenbuie/tidyexplain&lt;/span&gt;&lt;/div&gt;
+
+---
+
+class: text-slide
+
+# Right join
+
+&lt;img class="svg-img" src="images/static/svg/right-join-2.svg"/&gt;
+
+&lt;div class="my-footer"&gt;&lt;span&gt;https://github.com/gadenbuie/tidyexplain&lt;/span&gt;&lt;/div&gt;
+
+---
+
+class: text-slide
+
+# Right join
+
+.pull-left[All rows from y, and all columns from x and y. Rows in y with no match in x will have NA values in the new columns.]
+
+&lt;img src="images/right-join-2.gif"/&gt;
+
+&lt;div class="my-footer"&gt;&lt;span&gt;https://github.com/gadenbuie/tidyexplain&lt;/span&gt;&lt;/div&gt;
+
+---
+
+class: text-slide
+
+# Full join
+
+&lt;img class="svg-img" src="images/static/svg/full-join-2.svg"/&gt;
+
+&lt;div class="my-footer"&gt;&lt;span&gt;https://github.com/gadenbuie/tidyexplain&lt;/span&gt;&lt;/div&gt;
+
+---
+
+class: text-slide
+
+# Full join
+
+.pull-left[All rows and all columns from both x and y. Where there are not matching values, returns NA for the one missing.]
+
+&lt;img src="images/full-join-2.gif"/&gt;
+
+&lt;div class="my-footer"&gt;&lt;span&gt;https://github.com/gadenbuie/tidyexplain&lt;/span&gt;&lt;/div&gt;
+
+---
+
+class: text-slide
+
+# Filtering join (x &amp; y)
+
+&lt;img class="svg-img-full" src="images/static/svg/semi-join-2.svg"/&gt;
+
+&lt;div class="my-footer"&gt;&lt;span&gt;https://github.com/gadenbuie/tidyexplain&lt;/span&gt;&lt;/div&gt;
+
+---
+
+class: text-slide
+
+# Filtering join (x &amp; y)
+
+.pull-left[All rows from x where there are matching values in y, keeping just columns from x.]
+
+&lt;img src="images/semi-join-2.gif"/&gt;
+
+&lt;div class="my-footer"&gt;&lt;span&gt;https://github.com/gadenbuie/tidyexplain&lt;/span&gt;&lt;/div&gt;
+
+---
+
+class: text-slide
+
+# Filtering join (x NOT y)
+
+&lt;img class="svg-img-full" src="images/static/svg/anti-join-2.svg"/&gt;
+
+&lt;div class="my-footer"&gt;&lt;span&gt;https://github.com/gadenbuie/tidyexplain&lt;/span&gt;&lt;/div&gt;
+
+---
+
+class: text-slide
+
+# Filtering join (x NOT y)
+
+.pull-left[All rows from x where there are not matching values in y, keeping just columns from x.]
+
+&lt;img src="images/anti-join-2.gif"/&gt;
+
+&lt;div class="my-footer"&gt;&lt;span&gt;https://github.com/gadenbuie/tidyexplain&lt;/span&gt;&lt;/div&gt;
+
+---
+
+class: text-slide
+
+# Union
+
+&lt;img class="svg-img" src="images/static/svg/union-2.svg"/&gt;
+
+&lt;div class="my-footer"&gt;&lt;span&gt;https://github.com/gadenbuie/tidyexplain&lt;/span&gt;&lt;/div&gt;
+
+---
+
+class: text-slide
+
+# Union
+
+.pull-left[All unique rows from x and y.]
+
+&lt;img src="images/union-2.gif"/&gt;
+
+&lt;div class="my-footer"&gt;&lt;span&gt;https://github.com/gadenbuie/tidyexplain&lt;/span&gt;&lt;/div&gt;
+
+---
+
+class: text-slide
+
+# Union all
+
+&lt;img class="svg-img" src="images/static/svg/union-all-2.svg"/&gt;
+
+&lt;div class="my-footer"&gt;&lt;span&gt;https://github.com/gadenbuie/tidyexplain&lt;/span&gt;&lt;/div&gt;
+
+---
+
+class: text-slide
+
+# Union all
+
+.pull-left[All rows from x and y, keeping duplicates.]
+
+&lt;img src="images/union-all-2.gif"/&gt;
+
+&lt;div class="my-footer"&gt;&lt;span&gt;https://github.com/gadenbuie/tidyexplain&lt;/span&gt;&lt;/div&gt;
+
+---
+
+class: text-slide
+
+# R mapping to SQL (reference)
+
+&lt;img src="dplyr-sql.png" width="2517" /&gt;
+
+&lt;div class="my-footer"&gt;&lt;span&gt;https://r4ds.had.co.nz/relational-data.html&lt;/span&gt;&lt;/div&gt;
+
+---
+
+class: text-slide, main-slide, center, middle, hide-count
+
+# Sub queries
+
+---
+
+class: text-slide
+
+# Sub queries
+
+.pull-left[
+## Advantages
+
+- Isolate parts of the query
+
+- Reduce complexity of query]
+
+.pull-right[
+## Disadvantages
+
+- Can become overly complex if too nested
+
+- May execute slower due to optimizer]
+
+---
+
+class: text-slide
+
+# Sub query examples
+
+.pull-left[
+
+```sql
+-- Customer who made the maximum payment
+SELECT 
+    customerNumber, checkNumber, amount
+FROM
+    payments
+WHERE
+    amount = (SELECT 
+            MAX(amount)
+        FROM
+            payments);
+```
+]
+
+.pull-right[
+
+```sql
+-- Used when you wish to compute an aggregate value, 
+-- but you do not want the aggregate function to apply to the main query.
+SELECT 
+  productName,
+  buyPrice,
+  (SELECT 
+          MAX(buyPrice)
+      FROM
+          products
+      WHERE
+          productline = p.productline) maxBuyPriceInLine,
+   (SELECT 
+          AVG(buyPrice)
+      FROM
+          products
+      WHERE
+          productline = p.productline) avgBuyPriceInLine,
+   (SELECT 
+          MIN(buyPrice)
+      FROM
+          products
+      WHERE
+          productline = p.productline) minBuyPriceInLine                       
+FROM products p;
+```
+]
+
+---
+
+class: text-slide
+
+# Sub query (declaring variables)
+
+Using variables to capture sub query results may be easier to read rather than nesting your sub query with other queries. Here is a [post](https://stackoverflow.com/questions/11754781/how-to-declare-a-variable-in-mysql) covering variable declaration in MySQL.
+
+
+```sql
+-- Set the max amount to a variable
+SET @max_amount = (SELECT MAX(amount) FROM payments);
+
+-- Customer who made the maximum payment
+SELECT 
+    customerNumber, checkNumber, amount, @max_amount max_amount
+FROM
+    payments
+WHERE
+    amount = @max_amount;
+```
+
+
+---
+
+class: text-slide, main-slide, center, middle, hide-count
+
+# Views
+
+---
+
+class: text-slide
+
+# Views
+
+.pull-left[
+### Advantages
+
+.small[
+- Query simplicity
+
+- Security (narrow scope of access to views)
+
+- Personal views
+
+- Consistency of data despite underlying data changing]]
+
+.pull-right[
+### Disadvantages
+
+.small[
+- Performance
+
+- Read-only]]
+
+---
+
+class: text-slide
+
+# Views examples
+
+.pull-left[
+
+```sql
+-- View for basket values using orderdetails table
+CREATE VIEW basketValue AS
+    SELECT 
+        orderNumber, SUM(quantityOrdered * priceEach) AS total
+    FROM
+        orderDetails
+    GROUP BY orderNumber
+    ORDER BY total DESC;
+```
+]
+
+.pull-right[
+
+```sql
+-- Create views with joins - order number, customer name, and total sales per order
+CREATE VIEW customerOrders AS
+    SELECT 
+        d.orderNumber,
+        c.customerName,
+        c.phone,
+        SUM(quantityOrdered * priceEach) total
+    FROM
+        orderDetails d
+            INNER JOIN
+        orders o ON o.orderNumber = d.orderNumber
+            INNER JOIN
+        customers c ON c.customerNumber = o.customerNumber
+    GROUP BY d.orderNumber
+    ORDER BY total DESC;
+```
+]
+
+---
+
+class: text-slide, main-slide, center, middle, hide-count
+
+# Class Exercise
+
+---
+
+class: text-slide
+
+# Exercise 1
+
+- Manager would like to see the film's title , description and store_id value associated with each item and its inventory_id
+
+- Pull a list of each film in the inventory
+
+---
+
+class: text-slide
+
+# Exercise 2
+
+- One of the investors is interested in the films we carry and how many actors are listed for each film title
+
+- Pull a list of all titles, and figure out how many actors are associated with each title?
+
+---
+
+class: text-slide
+
+# Exercise 3
+
+- Manager from Store 1 is working on expanding the film collection there
+
+- Pull a list of distinct titles and their descriptions, currentlt available in inventory at Store 1
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": true,
+"slideNumberFormat": "%current%",
+"ratio": "16:9",
+"navigation": {
+"scroll": false
+}
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

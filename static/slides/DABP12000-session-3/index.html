@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Week 3: Introduction to SQL</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Joshua Goldberg  Data Understanding and Preparation: DABP12000 20A7 Fall 2020" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/robot-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/uchicago.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: left, middle, inverse, title-slide
+
+# Week 3: Introduction to SQL
+## And Databases with R
+### Joshua Goldberg <br><span style="font-size: 50%;">Data Understanding and Preparation: DABP12000 20A7<br>Fall 2020</span>
+
+---
+
+
+
+
+
+
+
+
+class: text-slide
+
+# Topics
+
+- SQL Train of Thought
+
+- Connect/Read/Write R ↔ MySQL
+
+- Comparing SQL and R (dplyr)
+
+---
+
+class: text-slide, main-slide, center, middle, hide-count
+
+# Structured Query Language (SQL)
+# Train of Thought
+
+---
+
+class: text-slide
+
+SQL is a declarative language: most programming languages are imperative, but SQL focuses on declarations (i.e., I want these columns from this table, but exclude these results)
+--
+
+
+```sql
+SELECT origin
+  ,dest
+  ,air_time
+FROM flights
+WHERE air_time &gt; 300
+```
+
+--
+
+As a user of SQL, you get to focus on what you want from the language.
+
+&lt;div class="my-footer"&gt;&lt;span&gt;https://blog.jooq.org/2016/03/17/10-easy-steps-to-a-complete-understanding-of-sql/&lt;/span&gt;&lt;/div&gt;
+
+---
+
+class: text-slide
+
+SQL syntax has a few orders to consider
+
+--
+
+.box-1[LEXICAL]
+
+
+```sql
+SELECT [DISTINCT]
+FROM
+WHERE
+GROUP BY
+HAVING
+UNION
+ORDER BY
+```
+
+--
+
+.box-1[LOGICAL]
+
+
+```sql
+FROM
+WHERE
+GROUP BY
+HAVING
+SELECT
+DISTINCT
+ORDER BY
+```
+
+&lt;div class="my-footer"&gt;&lt;span&gt;https://blog.jooq.org/2016/03/17/10-easy-steps-to-a-complete-understanding-of-sql/&lt;/span&gt;&lt;/div&gt;
+
+---
+
+class: text-slide
+
+# 🚫
+
+
+```sql
+SELECT dep_delay / arr_delay AS airline_metric
+FROM airports
+-- airline_metric is not available in this expression!
+WHERE airline_metric = 10
+GROUP BY tzone
+```
+
+--
+
+# ✅
+
+
+```sql
+SELECT *
+FROM
+  (SELECT dep_delay / arr_delay AS airline_metric
+  FROM airports
+  GROUP BY tzone) a
+WHERE a.airline_metric = 10
+```
+
+&lt;div class="my-footer"&gt;&lt;span&gt;https://blog.jooq.org/2016/03/17/10-easy-steps-to-a-complete-understanding-of-sql/&lt;/span&gt;&lt;/div&gt;
+
+???
+
+Because of logical (execution) order `SELECT` comes after `WHERE` so you cannot filter on a projection that does not exist yet. Note, not all databases implement things the same way. Rule number 2, for instance, does not apply exactly in the above way to MySQL, PostgreSQL, and SQLite.
+
+---
+
+class: text-slide
+
+# Tables are 👑
+
+.pull-left[
+
+```sql
+SELECT *
+FROM airports
+  FROM flights
+    FROM weather
+      FROM ...
+LIMIT 3;
+```
+
+
+
+
+```
+## # A tibble: 3 x 8
+##   faa   name                          lat   lon   alt    tz dst   tzone         
+##   &lt;chr&gt; &lt;chr&gt;                       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;         
+## 1 04G   Lansdowne Airport            41.1 -80.6  1044    -5 A     America/New_Y…
+## 2 06A   Moton Field Municipal Airp…  32.5 -85.7   264    -6 A     America/Chica…
+## 3 06C   Schaumburg Regional          42.0 -88.1   801    -6 A     America/Chica…
+```
+]
+
+--
+
+.pull-right[...And are like variables in R
+
+
+```sql
+SELECT *
+  (SELECT *
+    FROM airports
+    WHERE tzone = 'America/New_York') new_york
+```
+
+]
+
+&lt;div class="my-footer"&gt;&lt;span&gt;https://blog.jooq.org/2016/03/17/10-easy-steps-to-a-complete-understanding-of-sql/&lt;/span&gt;&lt;/div&gt;
+
+???
+
+SQL is mostly about table references, not columns. Make use of them. Don’t be afraid of writing derived tables or other complex table references.
+
+---
+
+class: text-slide
+
+# `GROUP BY` modifies table references 
+
+
+```sql
+SELECT year
+  ,carrier 
+  ,AVG(dep_delay)
+FROM flights
+GROUP BY year, carrier
+```
+
+- `GROUP BY` columns only are available for `SELECT` due to logical order
+
+- ⚠️  [However, MySQL does not follow this standard](https://blog.jooq.org/2012/08/05/mysql-bad-idea-384/)
+
+
+&lt;div class="my-footer"&gt;&lt;span&gt;https://blog.jooq.org/2016/03/17/10-easy-steps-to-a-complete-understanding-of-sql/&lt;/span&gt;&lt;/div&gt;
+
+---
+
+class: text-slide
+
+# SQL Code Style
+
+Can you quickly read this code easily?
+
+
+```sql
+SELECT faa, flight, hour, minute, day, year, lat, lon, alt, tz, dst, tzone, dep_delay, AVG(arr_delay)
+FROM flights, airports, airline, weather WHERE origin = '04G' | origin = '09J' &amp; dest = '0S9' airline IN (SELECT carrier FROM airlines ORDER BY carrier LIMIT 1)
+GROUP BY ...
+```
+
+--
+
+- Consistency is key
+
+--
+
+- Follow a style [guide](https://about.gitlab.com/handbook/business-ops/data-team/platform/sql-style-guide/)
+
+---
+
+class: text-slide, main-slide, center, middle, hide-count
+
+# Connect/Read/Write R ↔ MySQL
+
+.pull-left[.center[
+  &lt;figure&gt;
+  &lt;img src="Rlogo.png" alt="R logo" title="R logo" width="100%"&gt;
+&lt;/figure&gt;
+]]
+
+.pull-right[.center[
+  &lt;figure&gt;
+  &lt;img class="mysql-image" src="mysql-logo.png" alt="MySQL logo" title="MySQL logo" height="50%" width="100%"&gt;
+&lt;/figure&gt;
+]]
+
+---
+
+class: text-slide
+
+.pull-left[
+🚫 Password in scripts
+
+
+```r
+# Define a connection variable used
+con_mydb &lt;- dbConnect(
+  MySQL(),
+  user = key_list("servicename")$username,
+  # Never type your password in scripts
+* password = "myVeryHardPassword123",
+  dbname = "mydb",
+  host = "localhost"
+)
+```
+]
+
+.pull-right[
+✅ Use secure password retrieval
+
+
+```r
+# Define a connection variable
+con_mydb &lt;- dbConnect(
+  MySQL(),
+  # More secure method
+  user = key_list("servicename")$username,
+* password = key_get("servicename"),
+  # password = rstudioapi::askForPassword("Database password"),
+  dbname = "mydb",
+  host = "localhost"
+)
+```
+]
+
+- [RStudio securing credentials](https://db.rstudio.com/best-practices/managing-credentials)
+
+- [keyring R package](https://github.com/r-lib/keyring): `install.packages("keyring")`
+
+- `rstudioapi::askForPassword("Database password")`
+
+---
+
+class: text-slide
+
+# A brief note on MySQL and Passwords
+
+Run this command from MySQL Workbench:
+
+
+```sql
+-- Assumes username is root; replace yourpassword with a password of your choosing (make it a strong password)
+ALTER USER root@localhost IDENTIFIED WITH mysql_native_password BY 'yourpassword';
+```
+
+MySQL remote access is [disabled by default](https://stackoverflow.com/questions/14779104/how-to-allow-remote-connection-to-mysql), but still pick a secure password with the above SQL command to protect from any potential bad actors. Always use strong passwords.
+
+---
+
+class: text-slide
+
+# R and Database Backends
+
+- __DBI__: R Database Interface
+
+- __dbplyr__: A 'dplyr' Back End for Databases
+
+---
+
+class: text-slide
+
+.pull-left[
+
+The __DBI__ package allows you to interface with the database in R
+
+
+```r
+# Print table names in database mydb
+DBI::dbListTables(con_mydb)
+```
+
+```
+## [1] "airlines" "airports" "flights"  "planes"   "weather"
+```
+
+
+
+
+```r
+dbReadTable(con_mydb, "airlines")
+```
+
+]
+
+--
+
+.pull-right[
+Output from `dbReadTable`:
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; carrier &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; name &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 9E &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Endeavor Air Inc. &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; AA &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; American Airlines Inc. &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; AS &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Alaska Airlines Inc. &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; B6 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; JetBlue Airways &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; DL &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Delta Air Lines Inc. &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+--
+
+
+```r
+DBI::dbCreateTable(con_mydb, "iris", iris)
+
+# Set append = TRUE if table exists; you can also set overwrite = TRUE instead
+DBI::dbWriteTable(con_mydb, "iris", iris, append = TRUE, row.names = FALSE)
+# Drop table
+DBI::dbRemoveTable(con_mydb, "iris")
+# Query table
+DBI::dbGetQuery(con_mydb, "SELECT * FROM iris LIMIT 10")
+# Disconnect when you are finished
+dbDisconnect(con_mydb)
+```
+
+
+
+---
+
+class: text-slide
+
+.pull-left[
+
+The __dbplyr__ package allows you to interact with the database with dplyr code
+
+
+```r
+tbl(con_mydb, "airports")
+```
+
+
+```
+*## # Source:   table&lt;airports&gt; [?? x 8]
+*## # Database: mysql 8.0.23 [root@localhost:/mydb]
+##    faa   name                       lat    lon   alt    tz dst   tzone          
+##    &lt;chr&gt; &lt;chr&gt;                    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;          
+##  1 04G   Lansdowne Airport         41.1  -80.6  1044    -5 A     America/New_Yo…
+##  2 06A   Moton Field Municipal A…  32.5  -85.7   264    -6 A     America/Chicago
+##  3 06C   Schaumburg Regional       42.0  -88.1   801    -6 A     America/Chicago
+##  4 06N   Randall Airport           41.4  -74.4   523    -5 A     America/New_Yo…
+##  5 09J   Jekyll Island Airport     31.1  -81.4    11    -5 A     America/New_Yo…
+##  6 0A9   Elizabethton Municipal …  36.4  -82.2  1593    -5 A     America/New_Yo…
+##  7 0G6   Williams County Airport   41.5  -84.5   730    -5 A     America/New_Yo…
+##  8 0G7   Finger Lakes Regional A…  42.9  -76.8   492    -5 A     America/New_Yo…
+##  9 0P2   Shoestring Aviation Air…  39.8  -76.6  1000    -5 U     America/New_Yo…
+## 10 0S9   Jefferson County Intl     48.1 -123.    108    -8 A     America/Los_An…
+## # … with more rows
+```
+]
+
+.pull-right[
+When working with databases, __dbplyr__ tries to be as lazy as possible (more on this later)
+
+]
+
+---
+
+class: text-slide, main-slide, center, middle, hide-count
+
+# Connecting concepts
+
+.pull-left[
+
+&lt;figure&gt;
+  &lt;img src="Rlogo.png" alt="R logo" title="R logo" width="100%"&gt;
+&lt;/figure&gt;
+
+]
+
+.pull-right[
+
+&lt;figure&gt;
+  &lt;img class="mysql-image" src="mysql-logo.png" alt="MySQL logo" title="MySQL logo" width="100%"&gt;
+&lt;/figure&gt;
+
+]
+
+---
+
+class: text-slide
+
+# Focusing on Data Manipulation Language (DML)
+
+--
+
+- `SELECT`: modify tables by selecting specific columns, changing column names, or deriving new columns
+
+--
+
+  - `DISTINCT`
+
+--
+
+  - `CASE WHEN`
+
+--
+
+  - `COUNT`, `MIN`, `MAX`, `SUM`, `AVG`
+
+???
+
+SQL Command Types
+Data Definition
+Language (DDL)
+CREATE, ALTER, DROP,
+TRUNCATE, COMMENT,
+RENAME
+
+Data Manipulation
+Language (DML)
+SELECT, INSERT, UPDATE,
+DELETE, MERGE, CALL,
+DESCRIBE, EXPLAIN,
+LOCK TABLE
+
+Data Control
+Language (DCL)
+GRANT, REVOKE
+
+Transaction Control
+Language (TCL)
+COMMIT, SAVEPOINT,
+ROLLBACK,
+SET TRANSACTION
+
+---
+
+class: text-slide
+
+# Focusing on Data Manipulation Language (DML)
+
+- `WHERE`: filter tables with comparison operators
+
+--
+
+- `LIMIT`: control the number observations displayed after your query executes
+
+--
+
+- `GROUP BY`: modify table based on groups
+
+--
+
+  - `HAVING`: filter groups based on condition of aggregation
+
+--
+
+- `ORDER BY`: sort our data (ascending or descending)
+
+---
+
+name: memory-lane
+class: hide-count
+background-image: url(memory-lane.jpeg)
+background-size: cover
+
+---
+
+class: text-slide
+
+# Tidy data in R (Essentially third normal form)
+
+- Each variable must have its own column
+
+- Each observation must have its own row
+
+- Each value must have its own cell
+
+
+.center[
+
+
+  &lt;img src="tidy-1.png" alt="Tidy data" title="Tidy data" width="75%"&gt;
+
+]
+
+&lt;div class="my-footer"&gt;&lt;span&gt;Image from R4DS: https://r4ds.had.co.nz/tidy-data.html&lt;/span&gt;&lt;/div&gt;
+
+???
+
+Examples now of mapping R to SQL; we do not have to re-learn concepts!
+
+---
+
+class: text-slide
+
+# Mapping R (dplyr) to SQL: `SELECT`, `WHERE`
+
+Query the `nycflights13::flights` table to determine all the unique `origin`, `dest` combintions in the `year` 2013. Limit the rows to 10 observartions.
+
+
+```r
+flights_db &lt;- tbl(con_mydb, "flights")
+flights_db %&gt;% head(2)
+```
+
+```
+## # Source:   lazy query [?? x 19]
+## # Database: mysql 8.0.23 [root@localhost:/mydb]
+##    year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+##   &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;          &lt;int&gt;
+## 1  2013     1     1      517            515         2      830            819
+## 2  2013     1     1      533            529         4      850            830
+## # … with 11 more variables: arr_delay &lt;dbl&gt;, carrier &lt;chr&gt;, flight &lt;int&gt;,
+## #   tailnum &lt;chr&gt;, origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;,
+## #   hour &lt;dbl&gt;, minute &lt;dbl&gt;, time_hour &lt;chr&gt;
+```
+
+
+
+---
+
+class: text-slide
+
+# Mapping R (dplyr) to SQL: `SELECT`, `WHERE`
+
+
+
+.pull-left[
+.center[&lt;img src="Rlogo.png" alt="R logo" title="R logo" height="100px" width="100px"&gt;]
+
+```r
+flights_db %&gt;% 
+  filter(year == 2013) %&gt;% 
+  select(origin, dest) %&gt;% 
+  distinct() %&gt;% 
+  head(5)
+```
+
+```
+## # Source:   lazy query [?? x 2]
+## # Database: mysql 8.0.23 [root@localhost:/mydb]
+##   origin dest 
+##   &lt;chr&gt;  &lt;chr&gt;
+## 1 EWR    IAH  
+## 2 LGA    IAH  
+## 3 JFK    MIA  
+## 4 JFK    BQN  
+## 5 LGA    ATL
+```
+]
+
+.pull-right[
+.center[&lt;img class="mysql-image" src="mysql-logo.png" alt="MySQL logo" title="MySQL logo" height="100px" width="100px"&gt;]
+
+```sql
+SELECT DISTINCT origin
+  ,dest
+FROM flights
+WHERE year == 2013
+LIMIT 5
+```
+
+
+```
+## # A tibble: 5 x 2
+##   origin dest 
+##   &lt;chr&gt;  &lt;chr&gt;
+## 1 EWR    IAH  
+## 2 LGA    IAH  
+## 3 JFK    MIA  
+## 4 JFK    BQN  
+## 5 LGA    ATL
+```
+]
+
+---
+
+name: confused-gif
+class: hide-count
+background-image: url(confused.gif)
+background-size: cover
+
+---
+
+class: text-slide
+
+# dbplyr translates dplyr code to SQL
+
+.pull-left[
+
+```r
+flights_db %&gt;% 
+  filter(year == 2013) %&gt;% 
+  select(origin, dest) %&gt;% 
+  distinct() %&gt;% 
+  head(5) %&gt;% 
+  show_query()
+```
+
+```
+## &lt;SQL&gt;
+## SELECT DISTINCT `origin`, `dest`
+## FROM `flights`
+## WHERE (`year` = 2013.0)
+## LIMIT 5
+```
+]
+
+--
+
+.pull-right[
+- [Verb translation](https://dbplyr.tidyverse.org/articles/translation-verb.html)
+
+- [Expression translation](https://dbplyr.tidyverse.org/reference/translate_sql.html)
+
+- [Function translation](https://dbplyr.tidyverse.org/articles/translation-function.html)
+]
+
+---
+
+class: text-slide
+
+# Mapping R (dplyr) to SQL: `MAX`, `ORDER BY`
+
+Query the `nycflights13::flights` table to return the top five `arr_delay` by `year`, `origin`, and `dest`.
+
+
+
+---
+
+class: text-slide
+
+# Mapping R (dplyr) to SQL: `MAX`, `ORDER BY`
+
+.pull-left[
+.center[&lt;img src="Rlogo.png" alt="R logo" title="R logo" height="100px" width="100px"&gt;]
+
+```r
+flights_db %&gt;% 
+  group_by(year, origin, dest) %&gt;% 
+  summarise(max_arr_delay = max(arr_delay)) %&gt;% 
+  arrange(desc(max_arr_delay)) %&gt;% 
+  head(5)
+```
+]
+
+.pull-right[
+.center[&lt;img class="mysql-image" src="mysql-logo.png" alt="MySQL logo" title="MySQL logo" height="100px" width="100px"&gt;]
+
+```sql
+SELECT year
+  ,origin
+  ,dest
+  ,MAX(arr_delay) AS max_arr_delay
+FROM flights a
+GROUP BY year
+  ,origin
+  ,dest
+ORDER BY max_arr_delay DESC
+LIMIT 5
+```
+]
+
+---
+
+class: text-slide
+
+# Mapping R (dplyr) to SQL: `MAX`, `ORDER BY`
+
+.pull-left[
+.center[&lt;img src="Rlogo.png" alt="R logo" title="R logo" height="100px" width="100px"&gt;]
+
+```
+## # Source:     lazy query [?? x 4]
+## # Database:   mysql 8.0.23 [root@localhost:/mydb]
+## # Groups:     year, origin
+## # Ordered by: desc(max_arr_delay)
+##    year origin dest  max_arr_delay
+##   &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;         &lt;dbl&gt;
+## 1  2013 JFK    HNL            1272
+## 2  2013 JFK    CMH            1127
+## 3  2013 EWR    ORD            1109
+## 4  2013 JFK    SFO            1007
+## 5  2013 JFK    CVG             989
+```
+]
+
+.pull-right[
+.center[&lt;img class="mysql-image" src="mysql-logo.png" alt="MySQL logo" title="MySQL logo" height="100px" width="100px"&gt;]
+
+
+```
+## # A tibble: 5 x 4
+##    year origin dest  max_arr_delay
+##   &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;         &lt;dbl&gt;
+## 1  2013 JFK    HNL            1272
+## 2  2013 JFK    CMH            1127
+## 3  2013 EWR    ORD            1109
+## 4  2013 JFK    SFO            1007
+## 5  2013 JFK    CVG             989
+```
+]
+
+---
+
+class: text-slide
+
+# dbplyr translation: `MAX`, `ORDER BY`
+
+.pull-left[
+
+```r
+flights_db %&gt;% 
+  group_by(year, origin, dest) %&gt;% 
+  summarise(max_arr_delay = max(arr_delay)) %&gt;% 
+  arrange(desc(max_arr_delay)) %&gt;% 
+  head(5) %&gt;% 
+  show_query()
+```
+
+```
+## &lt;SQL&gt;
+## SELECT `year`, `origin`, `dest`, MAX(`arr_delay`) AS `max_arr_delay`
+## FROM `flights`
+## GROUP BY `year`, `origin`, `dest`
+## ORDER BY `max_arr_delay` DESC
+## LIMIT 5
+```
+]
+
+---
+
+class: text-slide
+
+# Mapping R (dplyr) to SQL: `CASE`, `DISTINCT`
+
+Query the `nycflights13::flights` and modify `month` to be the name of the month rather than a number. Display the distinct months with the changes.
+
+
+
+---
+
+class: text-slide
+
+# Mapping R (dplyr) to SQL: `CASE`, `DISTINCT`
+
+.pull-left[
+.center[&lt;img src="Rlogo.png" alt="R logo" title="R logo" height="100px" width="100px"&gt;]
+
+
+
+```r
+flights_db %&gt;% 
+  distinct(month) %&gt;% 
+  mutate(month_name = case_when(
+    month == 1 ~ "January",
+    month == 2 ~ "February",
+    month == 3 ~ "March",
+    month == 4 ~ "April",
+    month == 5 ~ "May",
+    month == 6 ~ "June",
+    # You get the point
+    TRUE ~ "Other month"
+  )) %&gt;% 
+  arrange(month)
+```
+
+]
+
+.pull-right[
+.center[&lt;img class="mysql-image" src="mysql-logo.png" alt="MySQL logo" title="MySQL logo" height="100px" width="100px"&gt;]
+
+```sql
+SELECT DISTINCT month,
+  CASE
+    WHEN month = 1 THEN 'January'
+    WHEN month = 2 THEN 'February'
+    WHEN month = 3 THEN 'March'
+    WHEN month = 4 THEN 'April'
+    WHEN month = 5 THEN 'May'
+    WHEN month = 6 THEN 'June'
+    -- You get the point
+    ELSE 'Other month'
+  END month_name
+FROM flights
+ORDER BY month
+```
+]
+
+---
+
+class: text-slide
+
+# Mapping R (dplyr) to SQL: `CASE`, `DISTINCT`
+
+.pull-left[
+.center[&lt;img src="Rlogo.png" alt="R logo" title="R logo" height="100px" width="100px"&gt;]
+
+```
+## # Source:     lazy query [?? x 2]
+## # Database:   mysql 8.0.23 [root@localhost:/mydb]
+## # Ordered by: month
+##    month month_name 
+##    &lt;int&gt; &lt;chr&gt;      
+##  1     1 January    
+##  2     2 February   
+##  3     3 March      
+##  4     4 April      
+##  5     5 May        
+##  6     6 June       
+##  7     7 Other month
+##  8     8 Other month
+##  9     9 Other month
+## 10    10 Other month
+## # … with more rows
+```
+
+]
+
+.pull-right[
+.center[&lt;img class="mysql-image" src="mysql-logo.png" alt="MySQL logo" title="MySQL logo" height="100px" width="100px"&gt;]
+
+
+```
+## # A tibble: 12 x 2
+##    month month_name 
+##    &lt;int&gt; &lt;chr&gt;      
+##  1     1 January    
+##  2     2 February   
+##  3     3 March      
+##  4     4 April      
+##  5     5 May        
+##  6     6 June       
+##  7     7 Other month
+##  8     8 Other month
+##  9     9 Other month
+## 10    10 Other month
+## 11    11 Other month
+## 12    12 Other month
+```
+]
+
+---
+
+class: text-slide
+
+# dbplyr translation: `CASE`, `DISTINCT`
+
+.pull-left[
+
+```
+## &lt;SQL&gt;
+## SELECT `month`, CASE
+## WHEN (`month` = 1.0) THEN ('January')
+## WHEN (`month` = 2.0) THEN ('February')
+## WHEN (`month` = 3.0) THEN ('March')
+## WHEN (`month` = 4.0) THEN ('April')
+## WHEN (`month` = 5.0) THEN ('May')
+## WHEN (`month` = 6.0) THEN ('June')
+## ELSE ('Other month')
+## END AS `month_name`
+## FROM (SELECT DISTINCT *
+## FROM (SELECT `month`
+## FROM `flights`) `dbplyr_003`) `dbplyr_004`
+## ORDER BY `month`
+```
+]
+
+
+
+---
+class: text-slide
+
+# Why use R &lt;del&gt;instead&lt;/del&gt; of SQL?
+
+Do not think of using R as a trade-off between SQL. Remember, R and SQL are both popular languages for dealing with data (data analysis, retrieval, manipulation, etc). Learning both R and SQL and how they can interface should provide a considered boost in your productivity and skills as a citizen of the data world. 
+
+Utilize both R and SQL by their strengths. In some cases, using only R is the most effective. In other cases, you will want to use SQL. In many cases, I suspect, you will end up using _both_.
+
+---
+
+class: text-slide
+
+# Why use R &lt;del&gt;instead&lt;/del&gt; of SQL?
+
+R can also help you reuse SQL code by [placing SQL code in R functions](https://glue.tidyverse.org/reference/glue_sql.html). For example, here's a query inside an R function to pull sales data and subset by region:
+
+
+```r
+query_sales_data &lt;- function(state, city, con_mydb) {
+  query &lt;- glue_sql("SELECT * FROM sales WHERE state = {state}", .con = con_mydb)
+  DBI::dbGetQuery(con_mydb, query)
+}
+```
+
+See this [vignette](https://dbplyr.tidyverse.org/articles/sql.html) for more examples of using dbplyr.
+
+---
+
+class: text-slide
+
+# One difference between dplyr and SQL
+
+dplyr's lexical and logical order are identical, while SQL's lexical and logical order are different (covered earlier in these slides). As a result, running R code may feel somewhat more intuitive since the steps of code execution are sequential (the same order that you write your R code).
+
+---
+
+class: text-slide, last-slide
+
+# Conclusion
+
+- Understanding lexical and logical order for SQL can help prevent common bugs in code
+
+- R can automate SQL code generation and facilitate reusing SQL code by placing SQL code in an R functions
+
+- You can download/upload data between R and SQL; automating the download/upload process with a programming language can save time 
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": true,
+"slideNumberFormat": "%current%",
+"ratio": "16:9",
+"navigation": {
+"scroll": false
+}
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

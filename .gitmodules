@@ -1,0 +1,6 @@
+[submodule "content/post/udacity-data-science-project-1"]
+	path = content/post/udacity-data-science-project-1
+	url = https://github.com/GoldbergData/udacity-data-science-project-1.git
+[submodule "content/post/seattle-rain"]
+	path = content/post/seattle-rain
+	url = https://github.com/GoldbergData/seattle-rain.git

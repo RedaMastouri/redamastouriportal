@@ -1,0 +1,29 @@
+# Navigation Links
+#   To link a homepage widget, specify the URL as a hash `#` followed by the filename of the
+#     desired widget in your `content/home/` folder.
+#   The weight parameter defines the order that the links will appear in.
+
+[[main]]
+  name = "Blog"
+  url = "#demo"
+  weight = 10
+
+[[main]]
+  name = "Talks"
+  url = "#talks"
+  weight = 20
+
+[[main]]
+  name = "Projects"
+  url = "#projects"
+  weight = 30
+
+[[main]]
+  name = "CV"
+  url = "files/cv.html"
+  weight = 40
+
+[[main]]
+  name = "Contact"
+  url = "/contact"
+  weight = 50

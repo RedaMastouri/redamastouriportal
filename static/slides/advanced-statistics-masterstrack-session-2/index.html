@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Statistical Thinking for Machine Learning: Lecture 4</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Joshua Goldberg  UChicago MastersTrack: Coursera Thank you to Gregory Bernstein for parts of these slides" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/robot-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="uchicago_slide.css" type="text/css" />
+    <link rel="stylesheet" href="animate.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: left, middle, inverse, title-slide
+
+# Statistical Thinking for Machine Learning: Lecture 4
+### Joshua Goldberg <br><span style="font-size: 50%;">UChicago MastersTrack: Coursera<br>Thank you to Gregory Bernstein for parts of these slides</span>
+
+---
+
+
+
+
+class: text-slide, title-inv-7, center, animated, slideInDown
+count: FALSE
+
+# What have we covered?
+
+- .left[Distributions, CDF, PDF, Method of Moments]
+
+- .left[ANOVA, Simple Regression]
+
+- .left[Hypothesis testing, Multiple Regression]
+
+---
+
+class: text-slide, title-inv-7, center
+count: FALSE
+
+# Agenda
+
+--
+
+- .left[Logistic Regression]
+  - .left[Why use Logistic Regression?]
+  - .left[Forming the Logistic Regression]
+  - .left[The Link Function]
+  - .left[Interpreting coefficients]
+  - .left[Determing the effect size]
+
+---
+
+class: text-slide, main-slide, center, middle, hide-count
+
+# Why use Logistic Regression?
+
+---
+
+class: text-slide
+
+# Why use Logistic Regression?
+
+.left-column[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; id &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; hours &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; pass &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 11 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 12 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 13 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 14 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 15 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+.right-column[
+Why don't we use Linear Regression (i.e., Linear Probability Model [LPM])?&lt;br&gt;
+`\(\text{Pass test}=\beta_0+\beta_1\text{hours studied}\)`&lt;br&gt;
+- Model output is unbounded: `\((-\infty, \infty)\)`
+- Constant change predicted probability for 1 unit increase in `\(\text{X}\)`
+- Residual variance is not constant for different values of `\(\text{X}\)`
+- Residuals can be large (outliers)
+]
+
+---
+
+class: text-slide
+
+# Large outliers, Non-constant variance
+
+.pull-left[
+
+```
+## 
+## Call:
+## lm(formula = pass ~ hours, data = study_df)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.79696 -0.31379 -0.02389  0.29967  0.78284 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)   
+## (Intercept)  0.02389    0.15988   0.149  0.88254   
+## hours        0.09663    0.02866   3.372  0.00263 **
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.4261 on 23 degrees of freedom
+## Multiple R-squared:  0.3308,	Adjusted R-squared:  0.3017 
+## F-statistic: 11.37 on 1 and 23 DF,  p-value: 0.002633
+```
+
+LPM: If we study 500 hours: 4834.0933768% probability of passing.
+]
+
+.pull-right[
+&lt;img src="index_files/figure-html/unnamed-chunk-3-1.png" width="504" /&gt;
+]
+
+---
+
+class: text-slide
+
+# Logit more interpretable 
+
+.pull-left[
+
+```
+## 
+## Call:
+## glm(formula = pass ~ hours, family = "binomial", data = study_df)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.8852  -0.7913  -0.3866   0.7670   1.8532  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)  
+## (Intercept)  -2.5563     1.1255  -2.271   0.0231 *
+## hours         0.5185     0.2099   2.470   0.0135 *
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 34.617  on 24  degrees of freedom
+## Residual deviance: 25.161  on 23  degrees of freedom
+## AIC: 29.161
+## 
+## Number of Fisher Scoring iterations: 4
+```
+
+Logit: If we study 500 hours: 100% probability of passing.
+]
+
+.pull-right[
+&lt;img src="index_files/figure-html/unnamed-chunk-5-1.png" width="504" /&gt;
+]
+
+---
+
+class: text-slide, center
+
+# Why use Logistic Regression?
+
+.center[
+&lt;img src="img/why_logistic.jpg" width="75%"/&gt;
+
+&lt;div class="my-footer"&gt;&lt;span&gt;https://www.statlearning.com&lt;/span&gt;&lt;/div&gt;
+]
+
+---
+
+class: text-slide
+
+# Reasons to use Logistic Regression
+
+.pull-left[
+- Model is bounded between `\([0, 1]\)`
+- Each incremental unit increase does not necessarily increase probability by the same weight
+
+## Logistic formula:
+- Logistic is a linear classifier
+- We need a smooth function that is not discontinuous between `\([0, 1]\)`
+- We will use the standard logistic sigmoid function: `\(y=\frac{1}{1 + e^{-x}}\)`
+]
+
+&lt;img src="index_files/figure-html/unnamed-chunk-6-1.png" width="504" /&gt;
+
+---
+
+class: text-slide, main-slide, center, middle, hide-count
+
+# Forming the Logistic Regression
+
+---
+
+class: text-slide
+
+# Forming the Logistic Regression
+
+- In a linear model, both `\(X\)` and `\(Y\)` have a range of `\((-\infty, \infty)\)`
+- If we have a categorical dependent variable, Y now has a range of `\([0, 1]\)` while X still have a range of `\((-\infty, \infty)\)`
+- We must convert Y so that is has the same range as X to create a linear predictor
+
+$$
+p(Y) \in (-\infty, \infty)
+$$
+Convert probability to odds:
+
+$$
+\frac{p(Y)}{1-p(Y)}, \in [0, \infty)
+$$
+Convert odds to log odds:
+
+$$
+\text{log odds}=\text{log}(\frac{p(Y)}{1-p(Y)}), \in (-\infty, \infty)
+$$
+
+---
+
+class: text-slide
+
+# Forming the Logistic Regression
+
+Linear model after conversion: `\(\text{log}(\frac{p(Y)}{1-p(Y)})=\beta X_i\)`
+
+Calculating probability:
+
+`\begin{align}
+\frac{p(Y)}{1-p(Y)} &amp; =e^{\beta X_i} \\
+ p(Y) &amp; = (1-p(Y))e^{\beta X_i} \\
+ p(Y) &amp; = e^{\beta X_i}-p(Y)e^{\beta X_i} \\
+ p(Y) + p(Y)e^{\beta X_i} &amp; = e^{\beta X_i} \\
+ p(Y)  (1+e^{\beta X_i}) &amp; = e^{\beta X_i} \\
+ p(Y) &amp; = \frac{e^{\beta X_i}}{(1+e^{\beta X_i})}
+\end{align}`
+
+---
+
+class:text-slide
+
+# Link Function
+
+- Here is a our logistic regression model: `\(p(Y=1|X_i)=\frac{1}{1+e^{-\beta X_i}}\)`
+- Let's compare to linear regression: `\(Y=\beta X_i\)`
+
+- For logistic regression, our desired output y is the probability of success
+- There is always a link function between predictors and output. For linear regression, it’s just the identity function. For logistic regression, we use a lopit link function
+- Linear regression is linear between X and Y. Logistic regression is linear between log odds and X. 
+- We use link function to transform log odds into interpretability.
+
+---
+
+class: text-slide
+
+# Estimating Coefficients
+
+- We will not use sum of squares to evaluate accuracy of this model, since this function is subject to multiple local minimums
+- Instead, we’ll use logistic loss function: `$$y\text{log}(p)+(1-y)\text{log}(1-p)$$`
+- Betas will be estimated using maximum likelihood estimation
+- **Maximum likelihood:** Given a sample, what is the parameter with the highest probability of observing or what is the parameter with the maximum likelihood of being correct?
+
+---
+
+class: text-slide
+
+# Interpretation of Coefficients and Output
+
+- A 1 unit increase in X causes the log odds to increase by `\(\beta X_i\)`
+- If log odds increase, odds increase, and probability increase
+- If we just want to quickly classify observations, we can say any positive output from the model is a success and any negative output from the model is a failure
+- Why? `$$\text{log}\frac{0.5}{1-0.5}=0$$`
+
+---
+
+class: text-slide, main-slide, center, middle, hide-count
+
+# Partial Effects
+
+---
+
+class: text-slide
+
+# An alternative link — Probit
+
+- Inverse CDF of normal distribution of probability = `\(\beta_0 + \beta_1X_1\)`
+
+- Link function is normal CDF
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": true,
+"slideNumberFormat": "%current%",
+"ratio": "16:9",
+"navigation": {
+"scroll": false
+}
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

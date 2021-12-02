@@ -1,0 +1,11 @@
+name: distributions
+title:
+username:
+account: goldbergdata
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 4493226
+bundleId: 4923786
+url: https://goldbergdata.shinyapps.io/distributions/
+when: 1628970345.21853
+lastSyncTime: 1628970345.21854
