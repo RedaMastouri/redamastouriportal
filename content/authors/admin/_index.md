@@ -49,7 +49,7 @@ social:
   link: https://www.freecodecamp.org/redamastouri
 - icon: strava
   icon_pack: fab
-  link: https://www.strava.com/athletes/9321532485
+  link: https://www.strava.com/athletes/95996783
 superuser: true
 ---
 
