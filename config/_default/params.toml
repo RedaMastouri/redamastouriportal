@@ -84,7 +84,12 @@ edit_page = {repo_url = "https://github.com/RedaMastouri/redamastouriportal", co
 
 # Enter contact details (optional). To hide a field, clear it to "".
 email = "reda.mastouri@rutgers.edu"
-phone = ""
+phone = "856-882-9056"
+
+# Enter the formspree token
+formspree = "f/xayvwvva"
+
+
 
 # Address
 # For country_code, use the 2-letter ISO code (see https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 )
