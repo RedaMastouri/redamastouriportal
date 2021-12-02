@@ -40,7 +40,7 @@ social:
   link: https://twitter.com/redamastouri
 - icon: linkedin
   icon_pack: fab
-  link: https://linkedin.com/in/redamastouri
+  link: https://www.linkedin.com/in/reda-mastouri/
 - icon: github
   icon_pack: fab
   link: https://github.com/RedaMastouri
