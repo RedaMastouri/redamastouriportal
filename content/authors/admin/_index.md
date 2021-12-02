@@ -1,21 +1,21 @@
 ---
 # Display name
-name: Joshua Goldberg
+name: Reda Mastouri
 authors:
 - admin
 bio: I am a data scientist with experience solving classification and demand-forecasting problems with statistics, machine learning, and deep learning.
 education:
   courses:
-  - course: Graduate Certificate in Software Design & Development
-    institution: University of Washington Bothell
-    year: 2021  
-  - course: MSc in Analytics
-    institution: University of Chicago
-    year: 2020
-  - course: BSc in Accounting and Finance
-    institution: University of South Florida
-    year: 2013
-email: "josh.goldberg1@outlook.com"
+  - course: PhD. in Decision Networks and Artificial Intelligence
+    institution: ENSET, Morocco
+    year: 2023 
+  - course: MSc in Data Sciences
+    institution: Saint Peter's University
+    year: 2021
+  - course: BSc in Computer Sciences
+    institution: Rutgers University
+    year: 2019
+email: "reda.mastouri@rutgers.edu"
 interests:
 - Artificial Intelligence
 - Deep Learning
@@ -23,9 +23,9 @@ interests:
 - Computer Science
 - Business/Economics
 
-name: Joshua Goldberg
+name: Reda Mastouri
 organizations:
-- name: University of Chicago
+- name: Rutgers University
   url: ""
   role: ""
 # - name: Amazon
@@ -37,20 +37,20 @@ social:
   link: '/contact'
 - icon: twitter
   icon_pack: fab
-  link: https://twitter.com/goldbergdata
+  link: https://twitter.com/redamastouri
 - icon: linkedin
   icon_pack: fab
-  link: https://linkedin.com/in/goldbergdata
+  link: https://linkedin.com/in/redamastouri
 - icon: github
   icon_pack: fab
-  link: https://github.com/goldbergdata
+  link: https://github.com/RedaMastouri
 - icon: free-code-camp
   icon_pack: fab
-  link: https://www.freecodecamp.org/goldbergdata
+  link: https://www.freecodecamp.org/redamastouri
 - icon: strava
   icon_pack: fab
-  link: https://www.strava.com/athletes/26922368
+  link: https://www.strava.com/athletes/9321532485
 superuser: true
 ---
 
-I am a data scientist with experience solving classification and demand-forecasting problems with statistics, machine learning, and deep learning. I have strong interests in artificial intelligence and programming, having completed a Master of Science in Analytics at the [University of Chicago](https://professional.uchicago.edu/find-your-fit/masters/master-science-analytics/curriculum). I am currently studying advanced computer science topics in C++ at [University of Washington Bothell](https://www.uwb.edu/stem/graduate/gcsdd). In my free time, I enjoy running, photography, and reading. I have finished two Chicago marathons and three half marathons.
+I am a data scientist with experience solving classification and demand-forecasting problems with statistics, machine learning, and deep learning. I have strong interests in artificial intelligence and programming, having completed a Master of Science in Analytics at the [Saint Peter's University](https://www.saintpeters.edu/academics/graduate-programs/master-of-science-in-data-science/). I am currently studying PhD in Decision Networks and Artificial Intelligence at [ENSET Mohammedia, Morocco](https://www.enset-media.ac.ma/). In my free time, I enjoy running, photography, and reading. I have finished two Chicago marathons and three half marathons.
