@@ -11,7 +11,7 @@
 #   Browse user installed themes in `data/themes/`
 theme = "ocean"
 
-# disqusURL: "https://redamastouri.com"
+# disqusURL: "redamastouri.com"
 
 # Enable users to switch between day and night mode?
 day_night = true
@@ -225,7 +225,7 @@ plugins_js  = []
 
   # Configuration of Disqus.
   [comments.disqus]
-    shortname = "reda.mastouri"  # Paste the shortname from your Disqus dashboard.
+    shortname = "redamastouri"  # Paste the shortname from your Disqus dashboard.
     show_count = true  # Show comment count in page header? (true/false)
 
   # Configuration of Commento.
