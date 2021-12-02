@@ -13,9 +13,11 @@
 
     {{ if $page.Params.email_form }}
 
-    {{ $post_action := "" }}
+    {{ $post_action :=printf "action=\"https://formspree.io/%s\"" site.Params.email_form }}
+   
     {{ if eq $page.Params.email_form 1 }}
       {{ $post_action = "netlify" }}
+      
     {{ else }}
       {{ if not site.Params.email }}
         {{ errorf "Please set an email address for the contact form using the `email` parameter in `config.toml`. Otherwise, set `email_form = 0` to disable the contact form." }}
