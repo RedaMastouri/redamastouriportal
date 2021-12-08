@@ -7,13 +7,16 @@ bio: I am a data scientist with experience solving classification and demand-for
 education:
   courses:
   - course: PhD. in Decision Networks and Artificial Intelligence
-    institution: ENSET, Morocco
+    institution: Smart Systems Labs, ENSIAS, Med V University, Morocco
     year: 2023 
+  - course: Executive MBA
+    institution: Quantic School of Business and Technology, Washington, DC
+    year: 2022
   - course: MSc in Data Sciences
     institution: Saint Peter's University
     year: 2021
-  - course: BSc in Computer Sciences
-    institution: Rutgers University
+  - course: BSc in Computer Sciences and Applied Mathematics
+    institution: Rutgers University/ New Jersey Institute of Technology
     year: 2019
 email: "reda.mastouri@rutgers.edu"
 interests:
@@ -25,7 +28,7 @@ interests:
 
 name: Reda Mastouri
 organizations:
-- name: Rutgers University
+- name: Rutgers University/ NJIT/ Saint Peter's University/ ENSET/ENSIAS
   url: ""
   role: ""
 # - name: Amazon
@@ -53,4 +56,4 @@ social:
 superuser: true
 ---
 
-I am a data scientist with experience solving classification and demand-forecasting problems with statistics, machine learning, and deep learning. I have strong interests in artificial intelligence and programming, having completed a Master of Science in Analytics at the [Saint Peter's University](https://www.saintpeters.edu/academics/graduate-programs/master-of-science-in-data-science/). I am currently studying PhD in Decision Networks and Artificial Intelligence at [ENSET Mohammedia, Morocco](https://www.enset-media.ac.ma/). In my free time, I enjoy running, photography, and reading. I have finished two Chicago marathons and three half marathons.
+I am a data scientist with experience solving classification and demand-forecasting problems with statistics, machine learning, and deep learning. I have strong interests in artificial intelligence and programming, having completed a Master of Science in Analytics at the [Saint Peter's University](https://www.saintpeters.edu/academics/graduate-programs/master-of-science-in-data-science/). I am currently studying PhD in Decision Networks and Artificial Intelligence at [Smart Systems Labs, ENSIAS, Med V University, Morocco](http://ensias.um5.ac.ma/). In my free time, I enjoy running, painting, photography, and reading. I have finished two NY Triathlons marathons and three half marathons.
