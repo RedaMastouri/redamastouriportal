@@ -1,14 +1,14 @@
 ---
-abstract: This sync session 3 for UChicago's Statistical Thinking Online Course for Machine learning. Credit to Gregory Berstein for slide inspiration.
+abstract: This sync session 3 for Rutgers University's Statistical Thinking Online Course for Machine learning. Credit to Gregory Berstein for slide inspiration.
 
 address:
-  city: Chicago
+  city: Newark, NJ
   country: United States
   postcode: 
   region: 
   street: 
 all_day: false
-authors: [Joshua Goldberg]
+authors: [Reda Mastouri]
 date: "2021-08-05T16:00:00Z"
 date_end: "2020-08-05T17:00:00Z"
 event: Sync Session
@@ -20,8 +20,8 @@ links:
 - icon: twitter
   icon_pack: fab
   name: Follow
-  url: https://twitter.com/goldbergdata
-location: University of Chicago
+  url: https://twitter.com/redamastouri
+location: Rutgers University
 math: true
 # projects:
 # - internal-project
