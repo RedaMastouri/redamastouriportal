@@ -30,10 +30,10 @@ name: Reda Mastouri
 organizations:
 - name: Rutgers University/ NJIT/ Saint Peter's University/ ENSET/ENSIAS
   url: ""
-  role: ""
-# - name: Amazon
-#  url: ""
-# role: Data Scientist
+  role: "AI Scholar"
+- name: Fulcrum Digital Inc.
+  url: "https://fulcrumdigital.com/"
+  role: Data Scientist/Function Enabling
 social:
 - icon: envelope
   icon_pack: fas
