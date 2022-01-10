@@ -34,6 +34,7 @@ organizations:
 - name: Fulcrum Digital Inc.
   url: "https://fulcrumdigital.com/"
   role: Data Scientist/Function Enabling
+  
 social:
 - icon: envelope
   icon_pack: fas
