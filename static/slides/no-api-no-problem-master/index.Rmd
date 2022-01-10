@@ -1,8 +1,8 @@
 ---
 title: "No API, No Problem"
 subtitle: "<span style=font-size:50%>Automating content delivery with R and Excel</span> <hr>"
-author: "<br>Joshua Goldberg | Hasib Neaz<br><i class='fab fa-twitter' style='color:#6CADDE'></i><i class='fab fa-github'></i> @GoldbergData"
-date: "slides at [github.com/GoldbergData/no-api-no-problem](https://github.com/GoldbergData/no-api-no-problem)"
+author: "<br>Reda Mastouri<br><i class='fab fa-twitter' style='color:#6CADDE'></i><i class='fab fa-github'></i> @redamastouri"
+date: "slides at [github.com/redamastouri/no-api-no-problem](https://github.com/redamastouri/no-api-no-problem)"
 output:
   xaringan::moon_reader:
     css: [default, style.css, robot-fonts]
