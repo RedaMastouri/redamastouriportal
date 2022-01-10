@@ -1,7 +1,7 @@
 ---
 title: "Statistical Thinking for Machine Learning: Lecture 4"
 subtitle: ""
-author: "Joshua Goldberg <br><span style='font-size: 50%;'>UChicago MastersTrack: Coursera<br>Thank you to Gregory Bernstein for parts of these slides</span>"
+author: "Reda Mastouri <br><span style='font-size: 50%;'>UChicago MastersTrack: Coursera<br>Thank you to Gregory Bernstein for parts of these slides</span>"
 header-includes:
    - \usepackage{cancel}
 output:

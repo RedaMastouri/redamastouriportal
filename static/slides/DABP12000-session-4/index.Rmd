@@ -1,7 +1,7 @@
 ---
 title: "Week 4: Advanced SQL"
 subtitle: ""
-author: "Joshua Goldberg <br><span style='font-size: 50%;'>Data Understanding and Preparation: DABP12000 20A7<br>Fall 2020</span>"
+author: "Reda Mastouri  <br><span style='font-size: 50%;'>Data Understanding and Preparation: DABP12000 20A7<br>Fall 2020</span>"
 output:
   xaringan::moon_reader:
     css: [default, css/uchicago.css, robot-fonts]
