@@ -1,8 +1,8 @@
 ---
 date: "2022-01-01T00:00:00Z"
 external_link: https://github.com/RedaMastouri/MalwarePredictor
-image: https://github.com/RedaMastouri/MalwarePredictor#
-  caption: Photo by Pixabay on pexels.com
+image: 
+  caption: Photo designe by Reda Mastouri
   focal_point: Smart
 summary: Massinissa is an AI Powered Malware Predictor!
 tags:
