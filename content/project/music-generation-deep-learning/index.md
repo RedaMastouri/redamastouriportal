@@ -1,11 +1,11 @@
 ---
-date: "2020-03-01T00:00:00Z"
-external_link: https://github.com/terrywang15/museG_dev
-image:
+date: "2021-11-01T00:00:00Z"
+external_link: https://github.com/RedaMastouri/DataDrivenAppUsingOptimalTransportAlgorithms
+image: https://github.com/RedaMastouri/DataDrivenAppUsingOptimalTransportAlgorithms/blob/master/images/carbon.png?raw=true
   caption: Photo by Alex Knight on pexels.com
   focal_point: Smart
 summary: An application of Deep Learning to help individuals generate new music using a Generative Adversarial Network.
 tags:
 - Deep Learning
-title: Generating Music with Deep Learning
+title: Application of Gradient Descent in Financial Services
 ---
