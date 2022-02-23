@@ -41,7 +41,7 @@ url_video: ""
 __Digital transformation__ is about reimagining how you bring together people, data, and processes to create value for your customers and maintain a competitive advantage in a digital-first world.
 Digital technologies create new opportunities for businesses across the globe by changing the way that goods and services are produced, sold, and consumed. These technologies help your organization adapt in the face of competitive pressures and evolving customer needs. Doing so often involves reimagining the digital platform, culture, and overall approach to transformation with a focus on customer engagement, business processes, and data and intelligence. Microsoft enables impactful digital transformation across four pillars:  Empower Employees, Engage Customers, Optimize Operations (Accelerate the responsiveness of your business, improve service levels, and reduce costs with intelligent processes.) and Transform Products (Find and capture the best new opportunities by using data as a strategic asset and shifting from hindsight to foresight.). 
 
-![png](./digital.jpg)
+![png](./digital.png)
 `Digital Tranformation Mind Map`
 
 This is the very paradigm shift that is driving so much digital innovation. if we think about this notion of the edge, it is actually about people experiencing life through technology. Whether it is mobile devices, sensors, sensor fabrics.
@@ -49,7 +49,7 @@ This notion of ubiquitous data and ubiquitous compute surrounds us. And it is cr
 
 <br>
 
-![png](./edge.jpg)
+![png](./edge.png)
 `Intelligent Cloud`
 
 We are super committed to it as a solution area. It also teaches us how we develop our cloud platform. The world of high performance gaming and the lack of tolerance for any type of millisecond bleep in that experience teaches us how to serve Fortune One Walmart in operating their stores around the world using Azure.
