@@ -15,6 +15,7 @@ image:
 __DevOps__ is a combination of cultural philosophies, practices, and patterns, as well as tools, that improves an organization's ability to deliver applications and services at high velocity and low risk, evolving and improving products at a faster rate than organizations that use traditional software development and infrastructure engineering and operations. Organizations can better serve their customers and compete in the market because of their speed and agility.
 My understanding of __DevOps__ is based on a set of adaptable services designed to help businesses build and deliver products more quickly and reliably using Azure/AWS and DevOps practices. These services make it easier to provision and manage infrastructure, deploy application code, automate software release processes, and monitor the performance of clients' applications and infrastructure.
 <br>
+
 `Index Terms` —Microservices architecture, serverless computing, Low-code Application, Kubernetes towards Development, DevSecOps, AI-Driven, DevOps as a Service, Machine Learning Operationalization.
 
 <br>
