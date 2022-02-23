@@ -76,7 +76,7 @@ Augmented reality is a technology that overlays computer-generated augmentations
 The digital transformation does not end here; we've all heard of an app called PokémonGo that allows gamers to catch Pokémon, or of utilizing or fitting any furniture using the IKEA app; both of these are made feasible by augmented reality technology. Augmented reality has grown in popularity in recent years, and the revolution isn't going away anytime soon. AR is offering marketers the ability to engage their customers with new experiences that can be the difference between buy and dropout.
 Let's take a quick look at the history of augmented reality; while it may appear to be a new technology, it has actually been around for decades.  
 
-![png](./ivan.png)
+![png](./ivan.jpg)
 `Ivan Sutherland (Father of Augmented Reality)`
 
 Ivan Sutherland developed the first air gadget called Sword of Damocles during 1968. This system used computer graphics to show users simple wireframe drawings. 
